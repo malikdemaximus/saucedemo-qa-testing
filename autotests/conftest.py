@@ -12,10 +12,8 @@ def attach_screenshot(browser):
         attachment_type=allure.attachment_type.PNG
     )
 
-@pytest.fixture(scope="function")  
-def browser():  
-    options = Options()  
-    options.add_argument("--headless")  # Запуск без браузера (для CI)  
-    driver = webdriver.Chrome(options=options)  
-    yield driver  
-    driver.quit()  
+@pytest.fixture
+def browser():
+    driver = webdriver.Chrome()
+    yield driver
+    driver.quit()
