@@ -21,21 +21,12 @@ jobs:
           
       - name: Run tests
         run: |
-          export PATH=$PATH:/usr/lib/chromium-browser/
-          pytest autotests/ --html=report.html --self-contained-html
+          export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE
+          export PATH=$PATH:/usr/bin/chromium-browser
+          pytest autotests/tests/ -v --alluredir=allure-results
           
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
           name: Test Report
-          path: report.html
-          
-      - name: Run tests
-        run: |
-          pytest autotests/ --alluredir=allure-results
-
-      - name: Generate Allure report
-        uses: actions/upload-artifact@v4
-        with:
-          name: Allure Report
           path: allure-results
