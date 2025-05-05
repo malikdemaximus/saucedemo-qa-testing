@@ -22,7 +22,7 @@ jobs:
       - name: Run tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE
-          export PATH=$PATH:/usr/bin/chromium-browser
+          python -c "from selenium.webdriver.common.by import By; print('By imported successfully')"
           pytest autotests/tests/ -v --alluredir=allure-results
           
       - name: Upload report
