@@ -29,3 +29,13 @@ jobs:
         with:
           name: Test Report
           path: report.html
+          
+      - name: Run tests
+        run: |
+          pytest autotests/ --alluredir=allure-results
+
+      - name: Generate Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Allure Report
+          path: allure-results
