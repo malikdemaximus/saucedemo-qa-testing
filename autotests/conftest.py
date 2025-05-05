@@ -1,19 +1,18 @@
-import pytest  
-from selenium import webdriver  
-from selenium.webdriver.chrome.options import Options  
-import allure
-
-@pytest.fixture
-def attach_screenshot(browser):
-    yield
-    allure.attach(
-        browser.get_screenshot_as_png(),
-        name="screenshot",
-        attachment_type=allure.attachment_type.PNG
-    )
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+import pytest
 
 @pytest.fixture
 def browser():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    
+    driver = webdriver.Chrome(
+        ChromeDriverManager().install(),
+        options=options
+    )
     yield driver
     driver.quit()
