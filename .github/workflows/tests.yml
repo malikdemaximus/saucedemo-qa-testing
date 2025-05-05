@@ -30,7 +30,6 @@ jobs:
       - name: Run tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE
-          python -c "from selenium import webdriver; print('Selenium version:', webdriver.__version__)"
           pytest autotests/tests/ -v --alluredir=allure-results
           
       - name: Upload report
