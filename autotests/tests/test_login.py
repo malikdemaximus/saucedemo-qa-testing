@@ -1,4 +1,4 @@
-from pages.login_page import LoginPage
+from autotests.pages.login_page import LoginPage
 
 def test_successful_login(browser):
     login_page = LoginPage(browser)
