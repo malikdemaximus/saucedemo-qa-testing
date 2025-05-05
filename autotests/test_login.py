@@ -1,10 +1,10 @@
-def test_successful_login(browser):  
-    browser.get("https://www.saucedemo.com/")  
-    browser.find_element("id", "user-name").send_keys("standard_user")  
-    browser.find_element("id", "password").send_keys("secret_sauce")  
-    browser.find_element("id", "login-button").click()  
-    assert "inventory.html" in browser.current_url, "Login failed!"  
+from pages.login_page import LoginPage
 
+def test_successful_login(browser):
+    login_page = LoginPage(browser)
+    login_page.login("standard_user", "secret_sauce")
+    assert "inventory.html" in browser.current_url
+    
 def test_invalid_login(browser):  
     browser.get("https://www.saucedemo.com/")  
     browser.find_element("id", "user-name").send_keys("locked_out_user")  
