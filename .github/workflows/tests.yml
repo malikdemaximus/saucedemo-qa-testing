@@ -27,16 +27,20 @@ jobs:
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
           sudo rm -f google-chrome-stable_current_amd64.deb
           
-          # Установка ChromeDriver
+          # Получаем точную версию Chrome
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
-          CHROME_MAJOR_VERSION=${CHROME_VERSION%.*.*}
-          wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR_VERSION}
-          CHROMEDRIVER_VERSION=$(cat LATEST_RELEASE_${CHROME_MAJOR_VERSION})
-          wget https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
           
+          # Установка соответствующего ChromeDriver
+          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          rm -rf chromedriver-linux64*
+          
+          # Проверка версий
+          echo "Chrome version: $(google-chrome --version)"
+          echo "ChromeDriver version: $(chromedriver --version)"
+                
       - name: Verify installations
         run: |
           google-chrome --version
@@ -55,3 +59,9 @@ jobs:
         with:
           name: Test Report
           path: allure-results
+
+      - name: Verify versions
+        run: |
+          google-chrome --version
+          chromedriver --version
+          python -c "import selenium; print(f'Selenium version: {selenium.__version__}')"
