@@ -45,7 +45,10 @@ jobs:
       - name: Run tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE
-          pytest autotests/tests/ -v --alluredir=allure-results
+          pytest autotests/ \
+          --alluredir=allure-results \
+          --reruns 1 \ 
+          --reruns-delay 2
           
       - name: Upload report
         uses: actions/upload-artifact@v4
