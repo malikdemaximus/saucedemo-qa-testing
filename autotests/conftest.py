@@ -6,40 +6,22 @@ import allure
 from allure_commons.types import AttachmentType
 import os
 
+from selenium.common.exceptions import WebDriverException
+
 @pytest.fixture
 def browser():
-    # Устанавливаем правильный путь к chromedriver
-    chromedriver_path = "/usr/local/bin/chromedriver"
-    
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    
-    service = Service(executable_path=chromedriver_path)
-    
     try:
-        driver = webdriver.Chrome(
-            service=service,
-            options=chrome_options
-        )
+        chrome_options = Options()
+        chrome_options.add_argument("--headless=new")  # Новый headless-режим
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        
+        driver = webdriver.Chrome(options=chrome_options)
         yield driver
-    except Exception as e:
-        allure.attach(
-            str(e),
-            name="browser_init_error",
-            attachment_type=AttachmentType.TEXT
-        )
-        raise
+    except WebDriverException as e:
+        pytest.fail(f"Browser initialization failed: {str(e)}")
     finally:
         if 'driver' in locals():
-            if hasattr(pytest, 'test_failed') and pytest.test_failed:
-                allure.attach(
-                    driver.get_screenshot_as_png(),
-                    name="screenshot_on_failure",
-                    attachment_type=AttachmentType.PNG
-                )
             driver.quit()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
