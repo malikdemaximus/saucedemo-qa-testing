@@ -47,3 +47,9 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     setattr(pytest, 'test_failed', rep.failed)
+@pytest.fixture(autouse=True)
+
+def add_allure_env(request, browser):
+    allure.dynamic.link("https://www.saucedemo.com/")
+    allure.dynamic.feature("UI Тесты")
+    allure.dynamic.label("layer", "UI")
